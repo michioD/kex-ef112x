@@ -1,0 +1,4 @@
+batch_vis.log
+cache_yolo_results/
+cahce_yolo_results_raw/
+datasets/
