@@ -154,7 +154,7 @@ def run_hierarchical_inference_simulation(
             s_t = cluster_safety_by_image[image_name]
         else:
             cached_data_raw = get_cached_data_raw(img_path)
-            s_t = residual_signal_safety(cached_data_raw['yolov8n_coco_raw'])
+            s_t = suppression_safety_metric(cached_data_raw['yolov8n_coco_raw'])
 
         accept_sml_cluster, q_t_cluster = hil_f_suppression.get_decision(s_t)
 
