@@ -109,8 +109,8 @@ def run_hierarchical_inference_simulation(
 ):
     n_samples = len(image_paths)
     beta = 0.5
-    hil_f = HIL_F(n_samples=n_samples, beta=beta)
-    hil_f_suppression = HIL_F(n_samples=n_samples, beta=beta)
+    hil_f_weakest = HIL_F(n_samples=n_samples, beta=beta)
+    hil_f_ssm = HIL_F(n_samples=n_samples, beta=beta)
     cluster_safety_by_image = {} if recompute_clusters else load_cluster_safety(cluster_csv)
     with open(output_csv, "w", newline="") as f:
         writer = csv.writer(f)
@@ -153,8 +153,9 @@ def run_hierarchical_inference_simulation(
         else:
             cached_data_raw = get_cached_data_raw(img_path)
             s_t = suppression_safety_metric(cached_data_raw['yolov8n_coco_raw'])
-        accept_sml_classification, q_t = hil_f.get_decision(p_t)
-        accept_sml_cluster, q_t_cluster = hil_f_suppression.get_decision(s_t)
+
+        accept_sml_classification, q_t = hil_f_weakest.get_decision(p_t)
+        accept_sml_cluster, q_t_cluster = hil_f_ssm.get_decision(s_t)
 
         accept_sml = accept_sml_classification and accept_sml_cluster
         # accept_sml = np.random.rand() < min(q_t, q_t_cluster)
@@ -178,8 +179,8 @@ def run_hierarchical_inference_simulation(
 
         total_cost += step_cost
         
-        hil_f.update(p_t, fp or misclassified)
-        hil_f_suppression.update(s_t, fn)
+        hil_f_weakest.update(p_t, fp or misclassified)
+        hil_f_ssm.update(s_t, fn)
         
 
         decision_success += 1 if (Y_t > 0 and not accept_sml) or (Y_t == 0 and accept_sml) else 0
