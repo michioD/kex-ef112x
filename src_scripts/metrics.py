@@ -100,25 +100,25 @@ def weakest_link_confidence(results):
 
     return float(np.clip(p_t, 0.0, 1.0))
 
-def suppression_metric(results, threshold=0.25):
-    """
-    Measures the ratio of suppressed candidates (< threshold) 
-    to detected objects (>= threshold).
-    """
-    if not results or len(results[0].boxes) == 0:
-        return 0.0
+# def suppression_metric(results, threshold=0.25):
+#     """
+#     Measures the ratio of suppressed candidates (< threshold) 
+#     to detected objects (>= threshold).
+#     """
+#     if not results or len(results[0].boxes) == 0:
+#         return 0.0
         
-    confs = results[0].boxes.conf.cpu().numpy()
-    num_detected = np.sum(confs >= threshold)
-    num_suppressed = 0
-    for conf in confs:
-        if conf <= threshold and conf > 0.1:
-            num_suppressed += 1
+#     confs = results[0].boxes.conf.cpu().numpy()
+#     num_detected = np.sum(confs >= threshold)
+#     num_suppressed = 0
+#     for conf in confs:
+#         if conf <= threshold and conf > 0.1:
+#             num_suppressed += 1
     
-    if num_detected == 0:
-        return float(1.0) # Return raw count if no objects were detected
+#     if num_detected == 0:
+#         return float(1.0) # Return raw count if no objects were detected
         
-    return float(num_suppressed / (num_detected+num_suppressed))
+#     return float(num_suppressed / (num_detected+num_suppressed))
 
 
 def connected_components(nodes, edges):
