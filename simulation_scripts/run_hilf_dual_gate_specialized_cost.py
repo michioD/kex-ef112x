@@ -178,8 +178,8 @@ def run_hierarchical_inference_simulation(
 
         total_cost += step_cost
         
-        hil_f.update(p_t, Y_t)
-        hil_f_suppression.update(s_t, Y_t)
+        hil_f.update(p_t, fp or misclassified)
+        hil_f_suppression.update(s_t, fn)
         
 
         decision_success += 1 if (Y_t > 0 and not accept_sml) or (Y_t == 0 and accept_sml) else 0

@@ -104,7 +104,7 @@ def load_cluster_safety(csv_path=CLUSTER_FEATURES_CSV):
 
 def run_hierarchical_inference_simulation(
     image_paths,
-    output_csv="results/hilf_results_dual_gate_global_cost.csv",
+    output_csv="results/hilf_results_dual_gate_same_yt.csv",
     cluster_csv=CLUSTER_FEATURES_CSV,
     recompute_clusters=False,
 ):

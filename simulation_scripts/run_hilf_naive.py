@@ -8,12 +8,6 @@ from src_scripts.metrics import *
 from src_scripts.precompute import get_cached_data
 from src_scripts.hilf_algo import HIL_F
 
-# check_cache()  # Ensure cache is ready before evaluation
-
-
-# ============================================================
-# Continuous Detection Cost Function (1 - F1 Score)
-# ============================================================
 def box_iou(boxA, boxB):
     xA = max(boxA[0], boxB[0])
     yA = max(boxA[1], boxB[1])
