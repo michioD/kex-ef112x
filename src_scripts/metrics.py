@@ -143,7 +143,7 @@ def connected_components(nodes, edges):
         components.append(component)
     return components
 
-def duplicate_hypothesis_clusters(results, low_threshold=0.01, iou_threshold=0.5):
+def cluster_raw_detections(results, low_threshold=0.01, iou_threshold=0.5):
     """
     Builds class-wise IoU connected components over low-confidence raw
     detections. Each component is treated as one object-hypothesis cluster.
@@ -195,11 +195,11 @@ def duplicate_hypothesis_clusters(results, low_threshold=0.01, iou_threshold=0.5
             })
     return clusters
 
-def unconfirmed_signal_mass(results, low_threshold=0.01, final_threshold=0.25, iou_threshold=0.5):
+def calculate_rejected_cluster_mass(results, low_threshold=0.01, final_threshold=0.25, iou_threshold=0.5):
     """
     Sum of max_conf for all clusters that didn't produce a final detection.
     """
-    clusters = duplicate_hypothesis_clusters(
+    clusters = cluster_raw_detections(
         results,
         low_threshold=low_threshold,
         iou_threshold=iou_threshold,
@@ -215,6 +215,6 @@ def suppression_safety_metric(results, **kwargs):
     Maps unconfirmed signal mass to a [0, 1] safety score.
     p_t = 1 / (1 + alpha * M)
     """
-    mass = unconfirmed_signal_mass(results, **kwargs)
+    mass = calculate_rejected_cluster_mass(results, **kwargs)
     return float(1.0 / (1.0 + mass))
 

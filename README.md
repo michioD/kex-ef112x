@@ -91,7 +91,7 @@ The SSM heuristic captures potential False Negatives (missed objects) by groupin
 flowchart TD
     Raw["Raw Predictions (Pre-NMS)<br/>conf &ge; 0.01"] --> Filter["Filter & Partition by Class<br/>Split candidates into {B_c}"]
     
-    subgraph DHC["src_scripts.metrics.duplicate_hypothesis_clusters()"]
+    subgraph DHC["src_scripts.metrics.cluster_raw_detections()"]
         Filter --> Adj["Construct Adjacency Graph G_c<br/>Edge (i, j) if IoU(b_i, b_j) > 0.5"]
         
         subgraph CC["src_scripts.metrics.connected_components(nodes, edges)"]
@@ -102,7 +102,7 @@ flowchart TD
         Clust --> Rep["Extract Cluster Peak Conf:<br/>m_k = max conf(b) for b in C_k"]
     end
     
-    subgraph USM["src_scripts.metrics.unconfirmed_signal_mass()"]
+    subgraph USM["src_scripts.metrics.calculate_rejected_cluster_mass()"]
         Rep --> Check{"Passed NMS?<br/>m_k &ge; 0.25"}
         Check -- "Yes (m_k &ge; 0.25)" --> Final["Final Detection<br/>(Produced Bounding Box)"]
         Check -- "No (m_k < 0.25)" --> Rejected["Suppressed Cluster<br/>(Potential Omission)"]
