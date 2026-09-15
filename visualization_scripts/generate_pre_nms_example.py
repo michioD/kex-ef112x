@@ -101,9 +101,6 @@ def visualize_index(img_path, output_path="raw_vs_nms_vis.png"):
     print(f"Saved comparison to {output_path}")
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--img_path", type=str, default="datasets/coco_images/val2017/000000012120.jpg")
-    parser.add_argument("--output", type=str, default="raw_vs_nms_vis.png")
-    args = parser.parse_args()
-    visualize_index(args.img_path, args.output)
+    visualize_index("datasets/coco_images/val2017/000000012120.jpg", "figures/pre_nms_vs_final_comparison_grid.png")
+
+    
