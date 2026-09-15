@@ -83,6 +83,41 @@ Results are saved to `results/` and preserve backwards compatibility with the re
 
 ---
 
+### Suppression Safety Metric (SSM) in `src_scripts/metrics.py` explaination
+
+The SSM heuristic captures potential False Negatives (missed objects) by grouping raw, pre-NMS candidate boxes into connected components and measuring the mass of unconfirmed detections:
+
+```mermaid
+flowchart TD
+    Raw["Raw Predictions (Pre-NMS)<br/>conf &ge; 0.01"] --> Filter["Filter & Partition by Class<br/>Split candidates into {B_c}"]
+    
+    subgraph DHC["src_scripts.metrics.duplicate_hypothesis_clusters()"]
+        Filter --> Adj["Construct Adjacency Graph G_c<br/>Edge (i, j) if IoU(b_i, b_j) > 0.5"]
+        
+        subgraph CC["src_scripts.metrics.connected_components(nodes, edges)"]
+            Adj --> Search["Graph Traversal<br/>Find connected subgraphs in G_c"]
+            Search --> Clust["Identify Clusters C_1, ..., C_K<br/>(Spatial smears of one object)"]
+        end
+        
+        Clust --> Rep["Extract Cluster Peak Conf:<br/>m_k = max conf(b) for b in C_k"]
+    end
+    
+    subgraph USM["src_scripts.metrics.unconfirmed_signal_mass()"]
+        Rep --> Check{"Passed NMS?<br/>m_k &ge; 0.25"}
+        Check -- "Yes (m_k &ge; 0.25)" --> Final["Final Detection<br/>(Produced Bounding Box)"]
+        Check -- "No (m_k < 0.25)" --> Rejected["Suppressed Cluster<br/>(Potential Omission)"]
+        Rejected --> Sum["Accumulate Rejected Mass:<br/>M = &Sigma; m_k"]
+    end
+    
+    subgraph SSM_Func["suppression_safety_metric()"]
+        Sum --> Squash["Reciprocal Normalization:<br/>s_t = 1 / (1 + M)"]
+        Squash --> Out["SSM Score s_t &isin; (0, 1]<br/>(Evaluated by Gate G_S)"]
+    end
+```
+
+
+---
+
 ## System Requirements
 
 - **Python:** 3.9+
