@@ -75,9 +75,9 @@ Results are saved to `results/` and preserve backwards compatibility with the re
 ├── figures/               # Generated figures and visual comparisons
 ├── report/                # LaTeX report source (report-clean/) and compiled PDF
 ├── results/               # Reference evaluation CSVs behind thesis tables
-├── simulation_scripts/    # Executable offloading policies (Naive, SSM, Dual-Gate)
+├── simulation_scripts/    # Offloading policies (Naive, SSM, Dual-Gate) where their results get cached in results/
 ├── src_scripts/           # Core HIL-F algorithm, metrics (Weakest Link, SSM), precompute
-├── visualization_scripts/ # Visual diagnostic tools and bounding box plotters
+├── visualization_scripts/ # Creates visualizations and figures to aid in understanding the detection models and the offloading policies
 └── thesis_replication.ipynb # Self-contained end-to-end results reproduction notebook
 ```
 
