@@ -10,13 +10,13 @@ trap 'rm -rf "$WORK_DIR"' EXIT
 mkdir -p "$DATA_DIR"
 
 # Download COCO validation images
-curl --fail --location --retry 3 --output "$WORK_DIR/val2017.zip" https://images.cocodataset.org/zips/val2017.zip
+curl --fail --location --retry 3 --output "$WORK_DIR/val2017.zip" http://images.cocodataset.org/zips/val2017.zip
 
 # Unzip into target directory
 unzip -q "$WORK_DIR/val2017.zip" -d "$DATA_DIR"
 
 # Download COCO train/val 2017 annotations
-curl --fail --location --retry 3 --output "$WORK_DIR/annotations_trainval2017.zip" https://images.cocodataset.org/annotations/annotations_trainval2017.zip
+curl --fail --location --retry 3 --output "$WORK_DIR/annotations_trainval2017.zip" http://images.cocodataset.org/annotations/annotations_trainval2017.zip
 
 # Unzip annotations into target directory
 # Note: The zip file inherently contains an 'annotations' directory at its root.
