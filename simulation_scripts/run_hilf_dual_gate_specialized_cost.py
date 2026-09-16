@@ -148,7 +148,7 @@ def run_hierarchical_inference_simulation(
         cached_data_raw = get_cached_data_raw(img_path)
         Y_t, fp, fn, misclassified = calculate_detection_cost_full(cached_data['yolov8n_coco'], cached_data['yolov8x_coco'])
         p_t = confidence_metric(cached_data['yolov8n_coco'])
-        s_t = suppression_safety_metric(cached_data_raw['yolov8n_coco'])
+        s_t = suppression_safety_metric(cached_data_raw['yolov8n_coco_raw'])
 
         # image_name = os.path.basename(img_path)
         # if image_name in cluster_safety_by_image:
