@@ -9,7 +9,6 @@ from src_scripts.precompute import get_cached_data
 from src_scripts.precompute_raw import get_cached_data_raw
 from src_scripts.hilf_algo import HIL_F
 CACHE_DIR = "cache_yolo_results"
-# CLUSTER_FEATURES_CSV = "yolov8_cluster_features.csv"
 
 
 def box_iou(boxA, boxB):
@@ -90,28 +89,14 @@ def calculate_detection_cost_full(sml_results, lml_results, iou_threshold=0.45):
 
 confidence_metric = weakest_link_confidence
 
-# def load_cluster_safety(csv_path=CLUSTER_FEATURES_CSV):
-#     if not os.path.exists(csv_path):
-#         return {}
-
-#     cluster_safety = {}
-#     with open(csv_path, newline="") as f:
-#         reader = csv.DictReader(f)
-#         for row in reader:
-#             cluster_safety[row["image"]] = float(row["cluster_safety"])
-#     return cluster_safety
 
 def run_hierarchical_inference_simulation(
     image_paths,
-    output_csv="results/hilf_results_dual_gate_same_yt.csv",
-    # cluster_csv=CLUSTER_FEATURES_CSV,
-    recompute_clusters=False,
-):
+    output_csv="results/hilf_results_dual_gate_same_yt.csv"):
     n_samples = len(image_paths)
     beta = 0.5
     hil_f_weakest = HIL_F(n_samples=n_samples, beta=beta)
     hil_f_ssm = HIL_F(n_samples=n_samples, beta=beta)
-    # cluster_safety_by_image = {} if recompute_clusters else load_cluster_safety(cluster_csv)
     with open(output_csv, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow([
@@ -150,12 +135,6 @@ def run_hierarchical_inference_simulation(
         p_t = confidence_metric(cached_data['yolov8n_coco'])
         s_t = suppression_safety_metric(cached_data_raw['yolov8n_coco_raw'])
 
-        # image_name = os.path.basename(img_path)
-        # if image_name in cluster_safety_by_image:
-        #     s_t = cluster_safety_by_image[image_name]
-        # else:
-        #     cached_data_raw = get_cached_data_raw(img_path)
-        #     s_t = suppression_safety_metric(cached_data_raw['yolov8n_coco_raw'])
 
         accept_sml_classification, q_t = hil_f_weakest.get_decision(p_t)
         accept_sml_cluster, q_t_cluster = hil_f_ssm.get_decision(s_t)
