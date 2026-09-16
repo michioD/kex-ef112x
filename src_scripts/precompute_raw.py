@@ -2,6 +2,7 @@ import os
 import glob
 import torch
 from ultralytics import YOLO
+from tqdm import tqdm
 
 # ============================================================
 # Configuration
@@ -38,8 +39,7 @@ def run_precompute():
     s_ml.to(device)
     l_ml.to(device)
 
-    for t, img_path in enumerate(image_paths):
-        print(f"Computing image {t}: {img_path}")
+    for img_path in tqdm(image_paths, desc="Precomputing raw YOLO predictions"):
         base_name = os.path.basename(img_path)
         cache_file = os.path.join(CACHE_DIR, f"{base_name}.pt")
         

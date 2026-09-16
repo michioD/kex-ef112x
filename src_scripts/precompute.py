@@ -2,6 +2,7 @@ import os
 import glob
 import torch
 from ultralytics import YOLO
+from tqdm import tqdm
 
 CACHE_DIR = "cache_yolo_results"
 IMAGE_DIR = "datasets/coco_images/val2017/*.jpg"
@@ -31,8 +32,7 @@ def run_precompute():
     s_ml.to(device)
     l_ml.to(device)
 
-    for t, img_path in enumerate(image_paths):
-        print(f"computing image {t}: {img_path}")
+    for img_path in tqdm(image_paths, desc="Precomputing standard YOLO predictions"):
         base_name = os.path.basename(img_path)
         cache_file = os.path.join(CACHE_DIR, f"{base_name}.pt")
         
