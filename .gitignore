@@ -3,3 +3,5 @@ cache_yolo_results/
 cahce_yolo_results_raw/
 datasets/
 .venv/
+yolov8n.pt
+yolov8x.pt
